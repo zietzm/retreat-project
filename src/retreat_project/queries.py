@@ -1,7 +1,7 @@
-from enum import StrEnum
+from enum import Enum
 
 
-class Query(StrEnum):
+class Query(str, Enum):
     ALL = """
         SELECT *
         FROM `{CDR}.person`
@@ -138,7 +138,7 @@ class Query(StrEnum):
         """
 
 
-class GroupField(StrEnum):
+class GroupField(str, Enum):
     Ethnicity = "ethnicity_concept_id"
     Race = "race_concept_id"
     Gender = "gender_source_concept_id"
