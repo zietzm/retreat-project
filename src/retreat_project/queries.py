@@ -138,7 +138,13 @@ class Query(StrEnum):
         """
 
 
-def group_query_by(query: Query, person_field: str = "ethnicity_concept_id") -> str:
+class GroupField(StrEnum):
+    Ethnicity = "ethnicity_concept_id"
+    Race = "race_concept_id"
+    Gender = "gender_source_concept_id"
+
+
+def group_query_by(query: Query, person_field: GroupField) -> str:
     return f"""
         SELECT
             {person_field},
