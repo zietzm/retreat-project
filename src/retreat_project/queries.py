@@ -146,7 +146,10 @@ class GroupField(str, Enum):
 
 def ungrouped_query(query: Query) -> str:
     return f"""
-        SELECT COUNT(DISTINCT person_id) AS count
+        SELECT
+            'Ungrouped' AS group_variable,
+            'All' AS group_id,
+            COUNT(DISTINCT person_id) AS count
         FROM (
             {query}
         ) AS subquery
@@ -156,7 +159,8 @@ def ungrouped_query(query: Query) -> str:
 def group_query_by(query: Query, person_field: GroupField) -> str:
     return f"""
         SELECT
-            {person_field},
+            '{person_field}' AS group_variable,
+            {person_field} AS group_id,
             COUNT(DISTINCT person_id) AS count
         FROM (
             {query}
