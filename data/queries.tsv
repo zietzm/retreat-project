@@ -8,7 +8,7 @@ AgeCutoff_40	SELECT   COUNT(DISTINCT person_id) FROM   `{CDR}.person` JOIN     `
 AgeCutoff_65L	SELECT   COUNT(DISTINCT person_id) FROM   `{CDR}.person` JOIN     `{CDR}.condition_occurrence` USING (person_id) WHERE condition_start_date is not null     AND birth_datetime is not null     AND DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 65
 AgeCutoff_80	SELECT   COUNT(DISTINCT person_id) FROM   `{CDR}.person` JOIN     `{CDR}.condition_occurrence` USING (person_id) WHERE condition_start_date is not null     AND birth_datetime is not null     AND DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 80
 Race	SELECT   COUNT(DISTINCT person_id) FROM   `{CDR}.person` WHERE   race_concept_id is not null
-Alive	SELECT   COUNT(DISTINCT person_id) FROM   `{CDR}.person` LEFT JOIN      `{CDR}.death` USING (person_id) WHERE   death_date is not null
+Alive	SELECT   COUNT(DISTINCT person_id) FROM   `{CDR}.person` WHERE person_id NOT IN (SELECT person_id from `{CDR}.death`)
 Diagnoses	SELECT   COUNT(DISTINCT person_id) FROM   `{CDR}.condition_occurrence` WHERE condition_concept_id != 0
 Medication	SELECT   COUNT(DISTINCT person_id) FROM     `{CDR}.drug_exposure` WHERE   drug_concept_id != 0    AND drug_concept_id is not null
 Outpatient visits	SELECT   COUNT(DISTINCT person_id) FROM   `{CDR}.visit_occurrence` WHERE   visit_concept_id = 9202
