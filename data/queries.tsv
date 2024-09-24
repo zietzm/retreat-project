@@ -14,9 +14,9 @@ Medication	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FR
 Outpatient visits	SELECT   p.ethnicity_concept_id,   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p INNER JOIN      `{CDR}.visit_occurrence` vo USING (person_id) WHERE   vo.visit_concept_id = 9202 GROUP BY      p.ethnicity_concept_id ORDER BY p.ethnicity_concept_id
 Zip or address	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM     `{CDR}.person` p WHERE      p.state_of_residence_concept_id != 0     ANd p.state_of_residence_concept_id is not null
 Obs period 1 week	SELECT COUNT(distinct person_id) FROM `{CDR}.observation_period` op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) >= 7
-Obs period 2 weeks	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 14
-Obs period 1 month	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 30
-Obs period 6 month	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 6*30
-Obs period 1 year	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 365
-Obs period 2 years	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 2*365.25
-Obs period 6 years	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 6*365.25
+Obs period 2 weeks	SELECT COUNT(distinct p.person_id) FROM `{CDR}.observation_period` op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 14
+Obs period 1 month	SELECT COUNT(distinct p.person_id) FROM `{CDR}.observation_period` op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 30
+Obs period 6 month	SELECT COUNT(distinct p.person_id) FROM `{CDR}.observation_period` op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 6*30
+Obs period 1 year	SELECT COUNT(distinct p.person_id) FROM `{CDR}.observation_period` op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 365
+Obs period 2 years	SELECT COUNT(distinct p.person_id) FROM `{CDR}.observation_period` op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 2*365.25
+Obs period 6 years	SELECT COUNT(distinct p.person_id) FROM `{CDR}.observation_period` op WHERE DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) > 6*365.25
