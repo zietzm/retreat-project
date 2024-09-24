@@ -9,48 +9,55 @@ class Query(str, Enum):
     AgeSex = """
         SELECT *
         FROM `{CDR}.person`
-        WHERE year_of_birth is not null AND gender_source_concept_id is not null
+        WHERE year_of_birth is not null AND
+              gender_source_concept_id is not null
         """
     AgeCutOff_21 = """
         SELECT *
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
-        WHERE condition_start_date is not null AND birth_datetime is not null AND
+        WHERE condition_start_date is not null AND
+              birth_datetime is not null AND
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 21
         """
     AgeCutOff_18 = """
         SELECT *
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
-        WHERE condition_start_date is not null AND birth_datetime is not null AND
+        WHERE condition_start_date is not null AND
+              birth_datetime is not null AND
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) >= 18
         """
     AgeCutoff_65 = """
         SELECT *
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
-        WHERE condition_start_date is not null AND birth_datetime is not null AND
+        WHERE condition_start_date is not null AND
+              birth_datetime is not null AND
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) >= 65
         """
     AgeCutoff_40 = """
         SELECT *
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
-        WHERE condition_start_date is not null AND birth_datetime is not null AND
+        WHERE condition_start_date is not null AND
+              birth_datetime is not null AND
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 40
         """
     AgeCutoff_65L = """
         SELECT *
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
-        WHERE condition_start_date is not null AND birth_datetime is not null AND
+        WHERE condition_start_date is not null AND
+              birth_datetime is not null AND
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 65
         """
     AgeCutoff_80 = """
         SELECT *
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
-        WHERE condition_start_date is not null AND birth_datetime is not null AND
+        WHERE condition_start_date is not null AND
+              birth_datetime is not null AND
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 80
         """
     Race = """
