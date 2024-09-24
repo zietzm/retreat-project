@@ -144,6 +144,15 @@ class GroupField(StrEnum):
     Gender = "gender_source_concept_id"
 
 
+def ungrouped_query(query: Query) -> str:
+    return f"""
+        SELECT COUNT(DISTINCT person_id) AS count
+        FROM (
+            {query}
+        ) AS subquery
+        """
+
+
 def group_query_by(query: Query, person_field: GroupField) -> str:
     return f"""
         SELECT
