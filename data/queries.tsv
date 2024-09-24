@@ -1,0 +1,22 @@
+Filter	AoU
+*	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person`
+AgeSex	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` WHERE     year_of_birth is not null AND gender_source_concept_id is not null
+AgeCutOff_21	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p JOIN     `{CDR}.condition_occurrence` co USING (person_id) WHERE co.condition_start_date is not null     AND p.birth_datetime is not null     AND DATE_DIFF(co.condition_start_date, DATE(p.birth_datetime), YEAR) <= 21
+AgeCutOff_18	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p JOIN     `{CDR}.condition_occurrence` co USING (person_id) WHERE co.condition_start_date is not null     AND p.birth_datetime is not null     AND DATE_DIFF(co.condition_start_date, DATE(p.birth_datetime), YEAR) >= 18
+AgeCutoff_65	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p JOIN     `{CDR}.condition_occurrence` co USING (person_id) WHERE co.condition_start_date is not null     AND p.birth_datetime is not null     AND DATE_DIFF(co.condition_start_date, DATE(p.birth_datetime), YEAR) >= 65
+AgeCutoff_40	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p JOIN     `{CDR}.condition_occurrence` co USING (person_id) WHERE co.condition_start_date is not null     AND p.birth_datetime is not null     AND DATE_DIFF(co.condition_start_date, DATE(p.birth_datetime), YEAR) <= 40
+AgeCutoff_65L	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p JOIN     `{CDR}.condition_occurrence` co USING (person_id) WHERE co.condition_start_date is not null     AND p.birth_datetime is not null     AND DATE_DIFF(co.condition_start_date, DATE(p.birth_datetime), YEAR) <= 65
+AgeCutoff_80	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p JOIN     `{CDR}.condition_occurrence` co USING (person_id) WHERE co.condition_start_date is not null     AND p.birth_datetime is not null     AND DATE_DIFF(co.condition_start_date, DATE(p.birth_datetime), YEAR) <= 80
+Race	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p WHERE   p.race_concept_id is not null
+Alive	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p LEFT JOIN      `{CDR}.death` d USING (person_id) WHERE   d.death_date is not null
+Diagnoses	SELECT   COUNT(DISTINCT person_id) FROM   `{CDR}.condition_occurrence` p WHERE p.condition_concept_id != 0;
+Medication	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM     `{CDR}.drug_exposure` d WHERE   d.drug_concept_id != 0    AND d.drug_concept_id is not null
+Outpatient visits	SELECT   p.ethnicity_concept_id,   COUNT(DISTINCT person_id) AS total_number_of_participants FROM   `{CDR}.person` p INNER JOIN      `{CDR}.visit_occurrence` vo USING (person_id) WHERE   vo.visit_concept_id = 9202 GROUP BY      p.ethnicity_concept_id ORDER BY p.ethnicity_concept_id
+Zip or address	SELECT   COUNT(DISTINCT person_id) AS total_number_of_participants FROM     `{CDR}.person` p WHERE      p.state_of_residence_concept_id != 0     ANd p.state_of_residence_concept_id is not null
+Obs period 1 week	SELECT COUNT(distinct person_id) FROM `{CDR}.observation_period` op WHERE datediff(DAY, observation_period_end_date, observation_period_start_date) => 7;
+Obs period 2 weeks	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE datediff(observation_period_end_date, observation_period_start_date) > 14;
+Obs period 1 month	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE datediff(observation_period_end_date, observation_period_start_date) > 30;
+Obs period 6 month	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE datediff(observation_period_end_date, observation_period_start_date) > 6*30;
+Obs period 1 year	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE datediff(observation_period_end_date, observation_period_start_date) > 365;
+Obs period 2 years	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE datediff(observation_period_end_date, observation_period_start_date) > 2*365.25;
+Obs period 6 years	SELECT COUNT(distinct p.person_id) FROM observation_period op WHERE datediff(observation_period_end_date, observation_period_start_date) > 6*365.25;
