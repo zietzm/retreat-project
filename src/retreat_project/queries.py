@@ -136,3 +136,15 @@ class Query(StrEnum):
         WHERE DATE_DIFF(observation_period_end_date,
                         observation_period_start_date, DAY) > 6*365.25
         """
+
+
+def group_query_by(query: Query, person_field: str = "ethnicity_concept_id") -> str:
+    return f"""
+        SELECT
+            {person_field},
+            COUNT(DISTINCT person_id) AS count
+        FROM (
+            {query}
+        ) AS subquery
+        GROUP BY {person_field}
+        """
