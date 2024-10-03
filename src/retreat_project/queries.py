@@ -1,19 +1,25 @@
 from enum import Enum
 
+import pandas as pd
+import pandas_gbq
+
 
 class Query(str, Enum):
     ALL = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         """
     AgeSex = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         WHERE year_of_birth is not null AND
               gender_source_concept_id is not null
         """
     AgeCutOff_21 = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
         WHERE condition_start_date is not null AND
@@ -21,7 +27,8 @@ class Query(str, Enum):
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 21
         """
     AgeCutOff_18 = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
         WHERE condition_start_date is not null AND
@@ -29,7 +36,8 @@ class Query(str, Enum):
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) >= 18
         """
     AgeCutoff_65 = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
         WHERE condition_start_date is not null AND
@@ -37,7 +45,8 @@ class Query(str, Enum):
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) >= 65
         """
     AgeCutoff_40 = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
         WHERE condition_start_date is not null AND
@@ -45,7 +54,8 @@ class Query(str, Enum):
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 40
         """
     AgeCutoff_65L = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
         WHERE condition_start_date is not null AND
@@ -53,7 +63,8 @@ class Query(str, Enum):
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 65
         """
     AgeCutoff_80 = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
         WHERE condition_start_date is not null AND
@@ -61,83 +72,97 @@ class Query(str, Enum):
               DATE_DIFF(condition_start_date, DATE(birth_datetime), YEAR) <= 80
         """
     Race = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         WHERE race_concept_id is not null
         """
     Alive = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
-        WHERE person_id NOT IN (SELECT person_id from `{CDR}.death`)
+        WHERE person_id NOT IN (SELECT
+          person_id from `{CDR}.death`)
         """
     Diagnoses = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.condition_occurrence` USING (person_id)
         WHERE condition_concept_id != 0
         """
     Medication = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.drug_exposure` USING (person_id)
         WHERE drug_concept_id != 0 AND drug_concept_id is not null
         """
     OutpatientVisits = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.visit_occurrence` USING (person_id)
         WHERE visit_concept_id = 9202
         """
     ZipOrAddress = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         WHERE state_of_residence_concept_id != 0 AND
               state_of_residence_concept_id is not null
         """
     ObsPeriod1Week = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.observation_period` USING (person_id)
         WHERE DATE_DIFF(observation_period_end_date,
                         observation_period_start_date, DAY) >= 7
         """
     ObsPeriod2Weeks = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.observation_period` USING (person_id)
         WHERE DATE_DIFF(observation_period_end_date,
                         observation_period_start_date, DAY) > 14
         """
     ObsPeriod1Month = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.observation_period` USING (person_id)
         WHERE DATE_DIFF(observation_period_end_date,
                         observation_period_start_date, DAY) > 30
         """
     ObsPeriod6Month = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.observation_period` USING (person_id)
         WHERE DATE_DIFF(observation_period_end_date,
                         observation_period_start_date, DAY) > 6*30
         """
     ObsPeriod1Year = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.observation_period` USING (person_id)
         WHERE DATE_DIFF(observation_period_end_date,
                         observation_period_start_date, DAY) > 365
         """
     ObsPeriod2Years = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.observation_period` USING (person_id)
         WHERE DATE_DIFF(observation_period_end_date,
                         observation_period_start_date, DAY) > 2*365.25
         """
     ObsPeriod6Years = """
-        SELECT *
+        SELECT
+          person_id, ethnicity_concept_id, race_concept_id, gender_source_concept_id
         FROM `{CDR}.person`
         JOIN `{CDR}.observation_period` USING (person_id)
         WHERE DATE_DIFF(observation_period_end_date,
@@ -174,3 +199,7 @@ def group_query_by(query: Query, person_field: GroupField) -> str:
         ) AS subquery
         GROUP BY {person_field}
         """
+
+
+def execute_query(query: str, cdr: str):
+    return pandas_gbq.read_gbq(query.format(CDR=cdr), dialect="standard")
