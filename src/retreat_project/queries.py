@@ -1,7 +1,6 @@
 from enum import Enum
 
-import pandas as pd
-import pandas_gbq
+import bigframes.pandas
 
 
 class Query(str, Enum):
@@ -202,4 +201,4 @@ def group_query_by(query: Query, person_field: GroupField) -> str:
 
 
 def execute_query(query: str, cdr: str):
-    return pandas_gbq.read_gbq(query.format(CDR=cdr), dialect="standard")
+    return bigframes.pandas.read_gbq(query.format(CDR=cdr))
