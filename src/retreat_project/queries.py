@@ -212,3 +212,20 @@ class PhenotypeQuery(str, Enum):
         JOIN `{CDR}.concept_ancestor` ON condition_concept_id = descendant_concept_id
         WHERE ancestor_concept_id IN (372924, 375557, 443454, 441874)
         """
+
+
+class CovariateQuery(str, Enum):
+    GwasCovar = """
+        SELECT
+          person_id,
+          IF(concept_name = 'Male', 1, 2) AS sex,
+          DATE_DIFF(
+            COALESCE(death_date, CURRENT_DATE),
+            DATE(birth_datetime),
+            YEAR
+          ) AS age
+        FROM `{CDR}.person`
+        INNER JOIN `{CDR}.concept` ON sex_at_birth_concept_id = concept_id
+        LEFT JOIN `{CDR}.death` USING (person_id)
+        WHERE concept_name in ('Female', 'Male')
+    """
