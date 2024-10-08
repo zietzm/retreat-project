@@ -202,3 +202,13 @@ def group_query_by(query: Query, person_field: GroupField) -> str:
 
 def execute_query(query: str, cdr: str):
     return bigframes.pandas.read_gbq(query.format(CDR=cdr))
+
+
+class PhenotypeQuery(str, Enum):
+    IschemicStroke = """
+        SELECT
+          person_id, condition_concept_id, condition_start_date, ancestor_concept_id
+        FROM `{CDR}.condition_occurrence`
+        JOIN `{CDR}.concept_ancestor` ON condition_concept_id = descendant_concept_id
+        WHERE ancestor_concept_id IN (372924, 375557, 443454, 441874)
+        """
